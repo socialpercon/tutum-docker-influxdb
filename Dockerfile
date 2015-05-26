@@ -2,7 +2,7 @@ FROM tutum/curl:trusty
 MAINTAINER Feng Honglin <hfeng@tutum.co>
 
 # Install InfluxDB
-ENV INFLUXDB_VERSION 0.8.8
+ENV INFLUXDB_VERSION 0.9.0-rc31
 RUN curl -s -o /tmp/influxdb_latest_amd64.deb https://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_amd64.deb && \
   dpkg -i /tmp/influxdb_latest_amd64.deb && \
   rm /tmp/influxdb_latest_amd64.deb && \
@@ -11,6 +11,10 @@ RUN curl -s -o /tmp/influxdb_latest_amd64.deb https://s3.amazonaws.com/influxdb/
 ADD config.toml /config/config.toml
 ADD run.sh /run.sh
 RUN chmod +x /*.sh
+RUN apt-get update
+RUN apt-get install -y python-pip
+RUN apt-get install -y python-dev
+RUN pip install psutil
 
 ENV PRE_CREATE_DB **None**
 ENV SSL_SUPPORT **False**
